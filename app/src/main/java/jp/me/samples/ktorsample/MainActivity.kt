@@ -13,16 +13,13 @@ import io.ktor.http.*
 import io.ktor.request.receive
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.serialization.DefaultJsonConfiguration
 import io.ktor.serialization.serialization
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.stringify
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -53,8 +50,7 @@ class MainActivity : AppCompatActivity() {
         runBlocking {
             val message = client.post<HelloWorld>("http://127.0.0.1:8080/") {
                 contentType(ContentType.Application.Json)
-                val json = Json(JsonConfiguration.Stable)
-                body = json.stringify(HelloWorld.serializer(), HelloWorld(hello = "world"))
+                body = HelloWorld("world")
             }
 
             android.util.Log.e("TAG", "CLIENT: Message from the server: $message")
